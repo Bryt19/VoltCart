@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Center — VoltCart</title>
+<meta name="description" content="Get answers to your questions about VoltCart orders, shipping, and products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .page-hero{padding:120px 32px 60px;text-align:center;position:relative;overflow:hidden}
+  .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(37,99,255,0.15) 0%,transparent 70%);z-index:0}
+  .page-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+  .page-hero h1{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;margin-bottom:16px}
+  .page-hero p{font-size:18px;color:var(--text2);font-weight:300;line-height:1.7}
+  .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--blue2);font-size:14px;font-weight:600;margin-bottom:32px;transition:gap 0.2s}
+  .back-link:hover{gap:12px}
+  .page-content{max-width:800px;margin:0 auto;padding:60px 32px}
+  .faq-section{margin-bottom:48px}
+  .faq-section h2{font-size:22px;font-weight:700;margin-bottom:20px;color:var(--text);border-left:3px solid var(--blue2);padding-left:14px}
+  .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+  .faq-item:hover{border-color:var(--border2)}
+  .faq-q{padding:20px 24px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:600;font-size:15px;user-select:none}
+  .faq-q .icon{flex-shrink:0;width:24px;height:24px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:transform 0.3s,background 0.2s;font-size:16px;font-weight:700;color:var(--blue2)}
+  .faq-item.open .faq-q .icon{transform:rotate(45deg);background:var(--blue);color:#fff}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.2s}
+  .faq-item.open .faq-a{max-height:400px}
+  .faq-a-inner{padding:0 24px 20px;font-size:15px;color:var(--text2);line-height:1.8;font-weight:300}
+  .contact-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius3);padding:40px;text-align:center;margin-top:48px}
+  .contact-card h3{font-size:20px;font-weight:700;margin-bottom:8px}
+  .contact-card p{color:var(--text2);margin-bottom:24px;font-weight:300}
+  .contact-card a{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;font-family:'Syne',sans-serif;box-shadow:0 0 20px var(--blue-glow);transition:all 0.2s}
+  .contact-card a:hover{background:var(--blue2);transform:translateY(-2px)}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Volt<span>Cart</span></a>
+  <div class="nav-actions" style="margin-left:auto">
+    <a href="index.html" class="back-link" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Back to Store</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-inner">
+    <div class="section-label" style="justify-content:center;margin-bottom:16px">Support</div>
+    <h1>Help <span style="color:var(--blue2)">Center</span></h1>
+    <p>Find answers to commonly asked questions about your orders, products, and VoltCart services.</p>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <div class="faq-section">
+    <h2>Orders & Payments</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I place an order on VoltCart? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Simply browse our product catalog, click "Add to Cart" on items you want, then open your cart by clicking the cart icon in the navbar. Review your items, click "Proceed to Checkout", fill in your delivery details, and complete payment securely via Paystack.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What payment methods are accepted? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">We accept all major payment methods through Paystack — including debit/credit cards (Visa, Mastercard), mobile money (MTN MoMo, Vodafone Cash, AirtelTigo Money), and bank transfers. All transactions are processed in Ghanaian Cedis (GH₵).</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Is my payment information secure? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Absolutely. VoltCart uses Paystack for all payment processing. Paystack is PCI-DSS compliant and uses 256-bit SSL encryption. We never store your card details on our servers.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I modify or cancel my order after placing it? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Orders can be modified or cancelled within 1 hour of placement. Contact our support team immediately via email with your transaction reference number. Once an order has been dispatched, it cannot be cancelled.</div></div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2>Shipping & Delivery</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">How long does delivery take? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Standard delivery takes 3–5 business days within Ghana. Express delivery (same-day or next-day) is available for orders placed before 2PM in Accra and major cities. Delivery times may vary slightly for remote areas.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How much does shipping cost? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Our flat-rate shipping fee is GH₵3.99 per order, regardless of the number of items. Free shipping is available on orders above GH₵500.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do you ship outside Ghana? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Currently, VoltCart ships exclusively within Ghana. We are actively working on expanding to other West African countries. Subscribe to our newsletter to be notified when international shipping becomes available.</div></div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2>Products & Warranty</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">Are VoltCart products genuine/authentic? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Yes — every product sold on VoltCart is 100% authentic and sourced directly from verified manufacturers and authorized distributors. We have a zero-tolerance policy for counterfeit goods.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What warranty do products come with? <div class="icon">+</div></div>
+      <div class="faq-a"><div class="faq-a-inner">All products carry a minimum 1-year manufacturer warranty. Premium products (headphones, smart watches, keyboards) include our exclusive VoltCart 2-Year Warranty at no extra cost. See individual product pages for specific warranty terms.</div></div>
+    </div>
+  </div>
+
+  <div class="contact-card">
+    <h3>Still need help?</h3>
+    <p>Our support team is available 24/7 and ready to assist you with any questions.</p>
+    <a href="contact.html"><i data-lucide="message-circle" style="width:16px;height:16px"></i> Contact Support</a>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+  if (window.lucide) lucide.createIcons();
+</script>
+<script>
+  window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — VoltCart</title>
+<meta name="description" content="Get in touch with the VoltCart support team.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080a0f;--bg2:#0d1117;--bg3:#111620;
+  --surface:#141b26;--surface2:#1a2233;--surface3:#1f2a3d;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --blue:#2563ff;--blue2:#3b82ff;--blue-glow:rgba(37,99,255,0.35);--blue-soft:rgba(37,99,255,0.12);
+  --text:#f0f4ff;--text2:#8b99b8;--text3:#4d5b78;
+  --radius:14px;--radius2:20px;--radius3:28px;
+  --green:#22c55e;--green-soft:rgba(34,197,94,0.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.15}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+
+/* NAV */
+#navbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(8,10,15,0.8);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px}
+.nav-logo span{color:var(--blue2)}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--blue2);font-size:14px;font-weight:600;transition:gap 0.2s}
+.back-link:hover{gap:12px}
+
+/* HERO */
+.page-hero{padding:120px 32px 60px;text-align:center;position:relative;overflow:hidden}
+.page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(37,99,255,0.15) 0%,transparent 70%);z-index:0}
+.page-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue2);margin-bottom:16px}
+.section-label::before{content:'';width:18px;height:2px;background:var(--blue2)}
+.page-hero h1{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;margin-bottom:16px}
+.page-hero p{font-size:18px;color:var(--text2);font-weight:300;line-height:1.7}
+
+/* PAGE CONTENT */
+.page-content{max-width:1000px;margin:0 auto;padding:40px 32px 80px}
+
+/* CHANNEL CARDS */
+.channels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin-bottom:48px}
+.channel-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);
+  padding:24px;text-align:center;transition:all 0.3s;cursor:pointer;
+}
+.channel-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.ch-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--blue-soft);border:1px solid rgba(37,99,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;color:var(--blue2);
+}
+.ch-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.ch-handle{font-size:13px;color:var(--blue2);font-weight:600;margin-bottom:6px}
+.ch-time{font-size:12px;color:var(--text3);font-weight:300}
+
+/* LAYOUT SPLIT */
+.contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:start}
+
+/* FAQ */
+.faq-section h2{font-size:20px;font-weight:700;margin-bottom:20px;border-left:3px solid var(--blue2);padding-left:14px}
+.faq-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:10px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{
+  width:100%;padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:14px;font-weight:600;color:var(--text);text-align:left;
+  transition:background 0.2s;
+}
+.faq-q:hover{background:var(--surface2)}
+.faq-chevron{flex-shrink:0;color:var(--text3);transition:transform 0.3s}
+.faq-item.open .faq-chevron{transform:rotate(180deg);color:var(--blue2)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.3s;
+  font-size:14px;color:var(--text2);font-weight:300;line-height:1.7;
+  padding:0 20px;
+}
+.faq-item.open .faq-a{max-height:200px;padding:0 20px 16px}
+
+/* CONTACT FORM */
+.contact-form-card{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius2);padding:32px;
+}
+.contact-form-card h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.contact-form-card .sub{font-size:14px;color:var(--text2);font-weight:300;margin-bottom:24px}
+.form-group{margin-bottom:18px;position:relative}
+.form-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:22px 16px 8px;font-size:15px;color:var(--text);
+  font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;
+}
+.form-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.form-input:focus~.form-label,.form-input:not(:placeholder-shown)~.form-label{top:10px;font-size:11px;color:var(--blue2);transform:none}
+.form-label{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text3);transition:all 0.2s;pointer-events:none;z-index:1}
+textarea.form-input{resize:vertical;min-height:110px;padding-top:24px}
+textarea~.form-label{top:18px;transform:none}
+.topic-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.topic-chip{
+  padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;
+  background:var(--bg2);border:1px solid var(--border);color:var(--text2);
+  cursor:pointer;transition:all 0.2s;
+}
+.topic-chip.active,.topic-chip:hover{background:var(--blue-soft);border-color:var(--blue);color:var(--blue2)}
+.submit-btn{
+  width:100%;padding:15px;border-radius:12px;
+  background:var(--blue);color:#fff;font-family:'Syne',sans-serif;
+  font-size:15px;font-weight:700;
+  box-shadow:0 0 24px var(--blue-glow);transition:all 0.25s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.submit-btn:hover{background:var(--blue2);transform:translateY(-2px);box-shadow:0 4px 36px var(--blue-glow)}
+
+/* SUCCESS STATE */
+.form-success{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 20px;gap:16px;
+}
+.form-success.visible{display:flex;animation:fadeUp 0.4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--green-soft);border:2px solid rgba(34,197,94,0.4);
+  display:flex;align-items:center;justify-content:center;color:var(--green);
+  animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes pop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+.success-icon svg{width:28px;height:28px}
+.success-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+.success-sub{font-size:14px;color:var(--text2);font-weight:300;line-height:1.7;max-width:300px}
+.reset-btn{
+  padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;
+  background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+  transition:all 0.2s;font-family:'Syne',sans-serif;margin-top:4px;
+}
+.reset-btn:hover{border-color:var(--blue);color:var(--blue2)}
+
+@media(max-width:768px){
+  #navbar{padding:0 20px}
+  .page-content{padding:32px 20px 64px}
+  .contact-layout{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .channels-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Volt<span>Cart</span></a>
+  <a href="index.html" class="back-link">
+    <i data-lucide="arrow-left" style="width:16px;height:16px"></i> Back to Store
+  </a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-inner">
+    <div class="section-label" style="justify-content:center">Support</div>
+    <h1>Get in <span style="color:var(--blue2)">Touch</span></h1>
+    <p>Our team of tech experts is available 24/7. Reach us through any channel — we typically respond within minutes.</p>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <div class="channels-grid">
+    <div class="channel-card">
+      <div class="ch-icon"><i data-lucide="message-circle" style="width:22px;height:22px"></i></div>
+      <div class="ch-title">Live Chat</div>
+      <div class="ch-handle">Open Chat →</div>
+      <div class="ch-time">Avg. response: &lt; 2 min</div>
+    </div>
+    <div class="channel-card">
+      <div class="ch-icon"><i data-lucide="mail" style="width:22px;height:22px"></i></div>
+      <div class="ch-title">Email Support</div>
+      <div class="ch-handle">hello@voltcart.com</div>
+      <div class="ch-time">Response within 4 hours</div>
+    </div>
+    <div class="channel-card">
+      <div class="ch-icon"><i data-lucide="phone" style="width:22px;height:22px"></i></div>
+      <div class="ch-title">Phone</div>
+      <div class="ch-handle">+233 30 000 0000</div>
+      <div class="ch-time">Mon–Fri, 8 AM – 8 PM</div>
+    </div>
+    <div class="channel-card">
+      <div class="ch-icon"><i data-lucide="twitter" style="width:22px;height:22px"></i></div>
+      <div class="ch-title">Twitter / X</div>
+      <div class="ch-handle">@VoltCartHQ</div>
+      <div class="ch-time">Response within 1 hour</div>
+    </div>
+  </div>
+
+  <div class="contact-layout">
+
+    <div class="faq-section">
+      <h2>Common Questions</h2>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How do I return a product?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">Returns are free within 30 days of delivery. Log in to your account, go to your orders, and select "Start Return." We'll arrange a courier pickup at no charge.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          When will my order arrive?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">Most orders are dispatched within 24 hours and delivered within 3–5 business days. You'll receive a tracking link via email as soon as your order ships.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do you ship internationally?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">Yes! We ship to over 40 countries. International shipping typically takes 7–14 business days depending on your location and customs processing times.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          My item arrived damaged — what do I do?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">We're sorry to hear that! Please take photos of the damage and contact us within 48 hours of delivery. We'll arrange a replacement or full refund immediately — no questions asked.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I change or cancel my order?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">Orders can be modified or cancelled within 2 hours of being placed. After that, the order enters our fulfilment pipeline. Contact live chat immediately for urgent changes.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How does the warranty process work?
+          <i data-lucide="chevron-down" class="faq-chevron" style="width:18px;height:18px"></i>
+        </button>
+        <div class="faq-a">Email us with your order reference and photos of the issue. Our team reviews claims within 2 business days and arranges a free replacement or repair for approved cases.</div>
+      </div>
+
+    </div>
+
+    <div class="contact-form-card">
+      <div id="contact-form-wrap">
+        <h2>Send Us a Message</h2>
+        <p class="sub">Fill in the form and a specialist will respond within 4 hours.</p>
+
+        <p style="font-size:12px;color:var(--text3);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Topic</p>
+        <div class="topic-row" id="topic-row">
+          <div class="topic-chip active" onclick="selectTopic(this)">Order Issue</div>
+          <div class="topic-chip" onclick="selectTopic(this)">Returns</div>
+          <div class="topic-chip" onclick="selectTopic(this)">Warranty</div>
+          <div class="topic-chip" onclick="selectTopic(this)">Product Query</div>
+          <div class="topic-chip" onclick="selectTopic(this)">Billing</div>
+          <div class="topic-chip" onclick="selectTopic(this)">Other</div>
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder=" " id="c-name">
+          <label class="form-label">Full Name</label>
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-input" placeholder=" " id="c-email">
+          <label class="form-label">Email Address</label>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder=" " id="c-order">
+          <label class="form-label">Order Reference (optional)</label>
+        </div>
+        <div class="form-group">
+          <textarea class="form-input" placeholder=" " id="c-message"></textarea>
+          <label class="form-label">Your Message</label>
+        </div>
+        <button class="submit-btn" onclick="submitContact()">
+          <i data-lucide="send" style="width:16px;height:16px"></i>
+          Send Message
+        </button>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div class="success-icon">
+          <i data-lucide="check" style="width:28px;height:28px"></i>
+        </div>
+        <div class="success-title">Message Sent!</div>
+        <p class="success-sub" id="success-msg-text">We've received your message and will reply to your email within 4 hours.</p>
+        <button class="reset-btn" onclick="resetForm()">Send Another Message</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+function selectTopic(chip){
+  document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+}
+
+function submitContact(){
+  const name = document.getElementById('c-name').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const msg = document.getElementById('c-message').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  if(!email || !email.includes('@')){alert('Please enter a valid email address.');return;}
+  if(!msg){alert('Please write a message.');return;}
+  const topic = document.querySelector('.topic-chip.active')?.textContent || 'General';
+  document.getElementById('success-msg-text').textContent = `Thanks, ${name}! We've received your ${topic.toLowerCase()} enquiry and will reply to ${email} within 4 hours.`;
+  document.getElementById('contact-form-wrap').style.display = 'none';
+  const s = document.getElementById('form-success');
+  s.classList.add('visible');
+  if(window.lucide) lucide.createIcons();
+}
+
+function resetForm(){
+  document.getElementById('c-name').value='';
+  document.getElementById('c-email').value='';
+  document.getElementById('c-order').value='';
+  document.getElementById('c-message').value='';
+  document.getElementById('contact-form-wrap').style.display='block';
+  const s = document.getElementById('form-success');
+  s.classList.remove('visible');
+  s.style.display='none';
+}
+
+window.addEventListener('load',()=>{ if(window.lucide) lucide.createIcons(); });
+</script>
+</body>
+</html>

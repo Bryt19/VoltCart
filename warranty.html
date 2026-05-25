@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warranty — VoltCart</title>
+<meta name="description" content="Learn about VoltCart's exclusive 2-year warranty on all products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .page-hero{padding:120px 32px 60px;text-align:center;position:relative;overflow:hidden}
+  .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(37,99,255,0.15) 0%,transparent 70%);z-index:0}
+  .page-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+  .page-hero h1{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;margin-bottom:16px}
+  .page-hero p{font-size:18px;color:var(--text2);font-weight:300;line-height:1.7}
+  .page-content{max-width:800px;margin:0 auto;padding:60px 32px}
+  .warranty-tiers{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-bottom:48px}
+  .tier-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:28px;text-align:center;transition:all 0.3s}
+  .tier-card.featured{border-color:var(--blue);background:linear-gradient(135deg,var(--surface2),var(--surface))}
+  .tier-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+  .tier-icon{width:56px;height:56px;border-radius:14px;background:var(--blue-soft);border:1px solid rgba(37,99,255,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--blue2)}
+  .tier-card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+  .tier-card .duration{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--blue2);margin-bottom:8px}
+  .tier-card p{font-size:13px;color:var(--text2);line-height:1.6;font-weight:300}
+  .coverage-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+  .coverage-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500}
+  .coverage-item .ci-icon{color:var(--blue2);flex-shrink:0}
+  .policy-section{margin-bottom:48px}
+  .policy-section h2{font-size:22px;font-weight:700;margin-bottom:16px;color:var(--text);border-left:3px solid var(--blue2);padding-left:14px}
+  .policy-section p{font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:12px;font-weight:300}
+  .policy-section ul{margin-left:20px;margin-bottom:12px}
+  .policy-section ul li{font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:8px;font-weight:300}
+  @media(max-width:600px){.coverage-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Volt<span>Cart</span></a>
+  <div class="nav-actions" style="margin-left:auto">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;color:var(--blue2);font-size:14px;font-weight:600;transition:gap 0.2s"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Back to Store</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-inner">
+    <div class="section-label" style="justify-content:center;margin-bottom:16px">Support</div>
+    <h1>Warranty <span style="color:var(--blue2)">Coverage</span></h1>
+    <p>Every VoltCart product comes with our industry-leading warranty protection — because quality should last.</p>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <div class="warranty-tiers">
+    <div class="tier-card">
+      <div class="tier-icon"><i data-lucide="shield" style="width:24px;height:24px"></i></div>
+      <h3>Standard Products</h3>
+      <div class="duration">1 Year</div>
+      <p>Speakers, desk accessories, cables, and peripherals</p>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-icon"><i data-lucide="shield-check" style="width:24px;height:24px"></i></div>
+      <h3>Premium Products</h3>
+      <div class="duration">2 Years</div>
+      <p>Headphones, smart watches, keyboards, and high-end peripherals</p>
+    </div>
+    <div class="tier-card">
+      <div class="tier-icon"><i data-lucide="zap" style="width:24px;height:24px"></i></div>
+      <h3>VoltCart Extended</h3>
+      <div class="duration">3 Years</div>
+      <p>Available as an add-on at checkout for select flagship products</p>
+    </div>
+  </div>
+
+  <div class="policy-section">
+    <h2>What's Covered</h2>
+    <div class="coverage-list">
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Manufacturing defects</div>
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Hardware malfunctions</div>
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Faulty components</div>
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Battery defects (within 12 months)</div>
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Display/screen issues</div>
+      <div class="coverage-item"><div class="ci-icon"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>Connectivity failures</div>
+    </div>
+  </div>
+
+  <div class="policy-section">
+    <h2>What's Not Covered</h2>
+    <ul>
+      <li>Physical damage from drops, impacts, or spills</li>
+      <li>Damage from unauthorized modifications or repairs</li>
+      <li>Normal wear and tear (scratches, cosmetic fading)</li>
+      <li>Damage from improper use or storage</li>
+      <li>Products with removed or tampered serial numbers</li>
+    </ul>
+  </div>
+
+  <div class="policy-section">
+    <h2>How to Claim Warranty</h2>
+    <p>To make a warranty claim, please:</p>
+    <ul>
+      <li>Email us with your original order reference and a description of the issue</li>
+      <li>Attach photos or a short video clearly showing the defect</li>
+      <li>Our team will evaluate your claim within 2 business days</li>
+      <li>Approved claims will receive a replacement or repair at no cost</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });</script>
+</body>
+</html>
