@@ -96,7 +96,7 @@ body.light #navbar{background:rgba(240,242,248,0.8)}
 
 /* ====== HERO ====== */
 #hero{
-  min-height:100vh;padding:120px 32px 80px;
+  min-height:60vh;padding:120px 32px 80px;
   display:flex;align-items:center;
   position:relative;overflow:hidden;
 }
@@ -124,7 +124,7 @@ body.light #navbar{background:rgba(240,242,248,0.8)}
 }
 .hero-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue2);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.hero-h1{font-size:clamp(42px,5vw,72px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+.hero-h1{font-size:clamp(38px,5vw,68px);font-weight:700;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
 .hero-h1 .accent{color:var(--blue2)}
 .hero-sub{font-size:18px;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:40px;font-weight:300}
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap}
