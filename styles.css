@@ -349,6 +349,24 @@ body.light .about-visual-inner{
 .pc-add:hover{background:var(--blue2);transform:scale(1.05)}
 .pc-add:active{transform:scale(0.97)}
 
+/* ====== #3 FIX: REMOVE BUTTONS ON LANDING PAGE CARDS ====== */
+.pc-remove{
+  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;
+  background:rgba(255,77,109,0.12);color:#ff4d6d;
+  border:1px solid rgba(255,77,109,0.3);
+  transition:all 0.2s;font-family:'Syne',sans-serif;
+}
+.pc-remove:hover{background:rgba(255,77,109,0.22);border-color:#ff4d6d;transform:scale(1.05)}
+.pc-remove:active{transform:scale(0.97)}
+
+.sc-remove{
+  padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;
+  background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);
+  color:#ff4d6d;transition:all 0.25s;font-family:'Syne',sans-serif;
+}
+.sc-remove:hover{background:#ff4d6d;color:#fff;border-color:#ff4d6d}
+.sc-remove span{position:relative;z-index:1}
+
 /* ====== SHOP SECTION ====== */
 #shop .shop-inner{max-width:1280px;margin:0 auto}
 .shop-controls{
@@ -539,6 +557,7 @@ textarea.form-input{resize:vertical;min-height:90px;padding-top:24px}
   box-shadow:0 0 30px var(--blue-glow);transition:all 0.25s;
 }
 .checkout-btn:hover{background:var(--blue2);transform:translateY(-2px)}
+.checkout-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
 
 /* ====== SUCCESS MODAL ====== */
 #success-overlay{
@@ -550,6 +569,7 @@ textarea.form-input{resize:vertical;min-height:90px;padding-top:24px}
 .success-modal{
   background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius3);
   width:100%;max-width:480px;padding:48px 40px;text-align:center;
+  max-height:90vh;overflow-y:auto;
   animation:modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
 }
 .success-check{
@@ -562,7 +582,14 @@ textarea.form-input{resize:vertical;min-height:90px;padding-top:24px}
 }
 @keyframes checkPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
 .success-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:8px}
-.success-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:28px;font-weight:300}
+.success-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:24px;font-weight:300}
+
+/* ====== #12 FIX: ORDER SUMMARY IN SUCCESS MODAL ====== */
+.success-order-summary{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;margin-bottom:20px;text-align:left;max-height:180px;overflow-y:auto;
+}
+
 .txn-box{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:16px 20px;margin-bottom:24px;text-align:left;

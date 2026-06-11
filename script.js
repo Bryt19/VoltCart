@@ -1,20 +1,26 @@
-let config = {};
+var config = config || {};
+let configLoaded = false;
+
 async function loadConfig() {
   try {
     const res = await fetch('.env');
     if (!res.ok) throw new Error("Status: " + res.status);
     const text = await res.text();
     text.split('\n').forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
       const parts = line.split('=');
       if (parts.length >= 2) {
         config[parts[0].trim()] = parts.slice(1).join('=').trim();
       }
     });
   } catch (e) {
-    console.warn("Could not parse .env file asynchronously, using local fallback.", e);
+    console.warn("Could not load .env file.", e);
+  } finally {
+    configLoaded = true;
   }
 }
-loadConfig();
+const configPromise = loadConfig();
 
 const PRODUCTS = [
   {id:1,name:'Pro X Wireless Headphones',image:'img/pro_headphones.png',category:'audio',price:299,oldPrice:379,rating:4.9,reviews:2847,desc:'Premium noise-cancelling headphones with 40hr battery life and spatial audio.'},
@@ -43,9 +49,7 @@ const TESTIMONIALS = [
 let cart = [];
 try {
   const savedCart = localStorage.getItem('cart');
-  if (savedCart) {
-    cart = JSON.parse(savedCart);
-  }
+  if (savedCart) cart = JSON.parse(savedCart);
 } catch (e) {
   console.error("Failed to load cart from localStorage:", e);
 }
@@ -53,68 +57,93 @@ try {
 function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+
 let currentCategory = 'all';
 let currentSearch = '';
 let currentSort = 'default';
 
-function renderFeatured(){
+// ─── #3 FIX: helper returns the correct button based on cart state ───
+function getCardAddBtn(id) {
+  const inCart = cart.some(x => x.id === id);
+  if (inCart) {
+    return `<button class="pc-remove ripple-btn" onclick="removeFromCartAndRefresh(${id})">Remove</button>`;
+  }
+  return `<button class="pc-add ripple-btn" onclick="addToCart(${id})">Add</button>`;
+}
+
+function getShopAddBtn(id) {
+  const inCart = cart.some(x => x.id === id);
+  if (inCart) {
+    return `<button class="sc-remove ripple-btn" onclick="removeFromCartAndRefresh(${id})"><span>Remove</span></button>`;
+  }
+  return `<button class="sc-add ripple-btn" onclick="addToCart(${id})"><span>Add to Cart</span></button>`;
+}
+
+// Remove from cart AND re-render grids so button updates on landing page
+function removeFromCartAndRefresh(id) {
+  removeFromCart(id);
+  renderFeatured();
+  renderShop();
+}
+
+function renderFeatured() {
   const grid = document.getElementById('featured-grid');
-  grid.innerHTML = PRODUCTS.slice(0,6).map(p => `
+  grid.innerHTML = PRODUCTS.slice(0, 6).map(p => `
     <div class="product-card reveal">
       <div class="pc-glow"></div>
       <button class="pc-wishlist" onclick="toggleWishlist(this)">♡</button>
       <div class="pc-img">
-        <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
       <div class="pc-body">
         <div class="pc-category">${p.category}</div>
         <div class="pc-name">${p.name}</div>
         <div class="pc-stars">
-          <span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+          <span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}</span>
           <span class="count">${p.rating} (${p.reviews.toLocaleString()})</span>
         </div>
         <div class="pc-footer">
           <div class="pc-price">GH₵${p.price}<span>GH₵${p.oldPrice}</span></div>
-          <button class="pc-add ripple-btn" onclick="addToCart(${p.id})">Add</button>
+          ${getCardAddBtn(p.id)}
         </div>
       </div>
     </div>
   `).join('');
   triggerReveal();
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 }
 
-function renderShop(){
+function renderShop() {
   let products = [...PRODUCTS];
-  if(currentCategory !== 'all') products = products.filter(p => p.category === currentCategory);
-  if(currentSearch) products = products.filter(p => p.name.toLowerCase().includes(currentSearch.toLowerCase()) || p.desc.toLowerCase().includes(currentSearch.toLowerCase()));
-  if(currentSort === 'price-asc') products.sort((a,b) => a.price - b.price);
-  else if(currentSort === 'price-desc') products.sort((a,b) => b.price - a.price);
-  else if(currentSort === 'rating') products.sort((a,b) => b.rating - a.rating);
+  if (currentCategory !== 'all') products = products.filter(p => p.category === currentCategory);
+  if (currentSearch) products = products.filter(p =>
+    p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+    p.desc.toLowerCase().includes(currentSearch.toLowerCase())
+  );
+  if (currentSort === 'price-asc') products.sort((a, b) => a.price - b.price);
+  else if (currentSort === 'price-desc') products.sort((a, b) => b.price - a.price);
+  else if (currentSort === 'rating') products.sort((a, b) => b.rating - a.rating);
+
   const grid = document.getElementById('shop-grid');
   grid.innerHTML = products.length ? products.map(p => `
     <div class="shop-card">
       <div class="sc-img">
-        <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
       <div class="sc-body">
         <div class="sc-name">${p.name}</div>
         <div class="sc-desc">${p.desc}</div>
         <div class="sc-footer">
           <div class="sc-price">GH₵${p.price}</div>
-          <button class="sc-add ripple-btn" onclick="addToCart(${p.id})"><span>Add to Cart</span></button>
+          ${getShopAddBtn(p.id)}
         </div>
       </div>
     </div>
   `).join('') : '<p style="color:var(--text2);padding:40px;text-align:center;grid-column:1/-1">No products found.</p>';
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 }
 
-function renderTestimonials(){
+function renderTestimonials() {
   document.getElementById('testi-grid').innerHTML = TESTIMONIALS.map(t => `
     <div class="testi-card reveal">
       <div class="tc-stars">${'★'.repeat(t.stars)}</div>
@@ -126,33 +155,34 @@ function renderTestimonials(){
     </div>
   `).join('');
   triggerReveal();
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 }
 
 const MAX_QTY = 5;
 
-function addToCart(id){
+function addToCart(id) {
   const productId = Number(id);
   const p = PRODUCTS.find(x => x.id === productId);
   const existing = cart.find(x => x.id === productId);
-  if(existing){
-    if(existing.qty >= MAX_QTY){
+  if (existing) {
+    if (existing.qty >= MAX_QTY) {
       showToast(`⚠️ Max quantity of ${MAX_QTY} reached for ${p.name}`);
       return;
     }
     existing.qty++;
   } else {
-    cart.push({...p, qty:1});
+    cart.push({...p, qty: 1});
   }
   updateCartBadge();
   renderCartItems();
   saveCart();
+  // #3 FIX: re-render grids so Add→Remove button updates immediately
+  renderFeatured();
+  renderShop();
   showToast(`🛒 ${p.name} added to cart!`);
 }
 
-function removeFromCart(id){
+function removeFromCart(id) {
   const productId = Number(id);
   cart = cart.filter(x => x.id !== productId);
   updateCartBadge();
@@ -160,43 +190,52 @@ function removeFromCart(id){
   saveCart();
 }
 
-function changeQty(id, delta){
+function changeQty(id, delta) {
   const productId = Number(id);
   const item = cart.find(x => x.id === productId);
-  if(!item) return;
+  if (!item) return;
   const newQty = item.qty + delta;
-  if(newQty > MAX_QTY){
+  if (newQty > MAX_QTY) {
     showToast(`⚠️ Maximum quantity is ${MAX_QTY}`);
     return;
   }
   item.qty = newQty;
-  if(item.qty <= 0) removeFromCart(productId);
-  else { updateCartBadge(); renderCartItems(); saveCart(); }
+  if (item.qty <= 0) {
+    removeFromCart(productId);
+    // #3 FIX: refresh grids when qty hits 0 (item removed)
+    renderFeatured();
+    renderShop();
+  } else {
+    updateCartBadge();
+    renderCartItems(); // #6 FIX: always re-renders total on every qty change
+    saveCart();
+  }
 }
 
-function updateCartBadge(){
+function updateCartBadge() {
+  // Cart badge = number of distinct items (not total quantity)
   document.getElementById('cart-badge').textContent = cart.length;
 }
 
-function renderCartItems(){
+function renderCartItems() {
   const list = document.getElementById('cart-items-list');
   const footer = document.getElementById('cart-footer');
   const empty = document.getElementById('cart-empty');
-  
-  if(!cart.length){
+
+  if (!cart.length) {
     list.innerHTML = '';
     empty.style.display = 'flex';
     footer.style.display = 'none';
     return;
   }
-  
+
   empty.style.display = 'none';
   footer.style.display = 'block';
-  
+
   list.innerHTML = cart.map(item => `
     <div class="cart-item" data-id="${item.id}">
       <div class="ci-img">
-        <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 12px;">
+        <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
       </div>
       <div class="ci-info">
         <div class="ci-name">${item.name}</div>
@@ -205,180 +244,229 @@ function renderCartItems(){
           <button class="qty-btn dec-btn">−</button>
           <span class="qty-val">${item.qty}</span>
           <button class="qty-btn inc-btn">+</button>
-          <button class="ci-remove remove-btn"><i data-lucide="trash-2" style="width: 16px; height: 16px;"></i></button>
+          <button class="ci-remove remove-btn"><i data-lucide="trash-2" style="width:16px;height:16px;"></i></button>
         </div>
       </div>
     </div>
   `).join('');
-  
-  // Attach event listeners dynamically to each rendered cart item
+
   list.querySelectorAll('.cart-item').forEach(itemEl => {
     const id = parseInt(itemEl.getAttribute('data-id'), 10);
     itemEl.querySelector('.dec-btn').addEventListener('click', () => changeQty(id, -1));
     itemEl.querySelector('.inc-btn').addEventListener('click', () => changeQty(id, 1));
-    itemEl.querySelector('.remove-btn').addEventListener('click', () => removeFromCart(id));
+    itemEl.querySelector('.remove-btn').addEventListener('click', () => {
+      removeFromCart(id);
+      // #3 FIX: refresh grids when item removed from cart drawer
+      renderFeatured();
+      renderShop();
+    });
   });
 
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 
-  const subtotal = cart.reduce((s,x) => s + x.price * x.qty, 0);
+  // #6 FIX: total always recalculated from cart state on every render
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
   document.getElementById('cart-total').textContent = 'GH₵' + subtotal.toFixed(2);
 }
 
-function openCart(){
+function openCart() {
   closeMobileMenu();
   document.getElementById('cart-overlay').classList.add('open');
   document.getElementById('cart-drawer').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeCart(){
+function closeCart() {
   document.getElementById('cart-overlay').classList.remove('open');
   document.getElementById('cart-drawer').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-function openCheckout(){
-  if(!cart.length) return;
+function openCheckout() {
+  if (!cart.length) return;
   closeCart();
-  const subtotal = cart.reduce((s,x) => s + x.price * x.qty, 0);
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
   const shipping = 3.99;
   const total = subtotal + shipping;
-  
+
   document.getElementById('checkout-summary').innerHTML = `
     <div class="os-title">Order Summary</div>
     ${cart.map(x => `
-      <div class="os-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-        <img src="${x.image}" alt="${x.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
-        <span style="flex: 1; font-weight: 500;">${x.name} ×${x.qty}</span>
-        <span style="font-weight: 700;">GH₵${(x.price*x.qty).toFixed(2)}</span>
+      <div class="os-row" style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <img src="${x.image}" alt="${x.name}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">
+        <span style="flex:1;font-weight:500;">${x.name} ×${x.qty}</span>
+        <span style="font-weight:700;">GH₵${(x.price * x.qty).toFixed(2)}</span>
       </div>
     `).join('')}
-    <div class="os-row" style="margin-top: 12px;"><span>Shipping</span><span>GH₵${shipping.toFixed(2)}</span></div>
+    <div class="os-row" style="margin-top:12px;"><span>Shipping</span><span>GH₵${shipping.toFixed(2)}</span></div>
     <div class="os-row total"><span>Total</span><span>GH₵${total.toFixed(2)}</span></div>
   `;
   document.getElementById('checkout-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeCheckout(){
+function closeCheckout() {
   document.getElementById('checkout-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-function processCheckout(){
-  const name = document.getElementById('f-name').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const phone = document.getElementById('f-phone').value.trim();
+// ─── #7 FIX: full per-field validation with regex before Paystack fires ───
+async function processCheckout() {
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
   const address = document.getElementById('f-address').value.trim();
-  
-  if(!name){ showToast('⚠️ Please enter your full name'); return; }
-  if(!email || !email.includes('@')){ showToast('⚠️ Please enter a valid email address'); return; }
-  
-  const subtotal = cart.reduce((s,x) => s + x.price * x.qty, 0);
+
+  // Validate name
+  if (!name || name.length < 2) {
+    showToast('⚠️ Please enter your full name'); return;
+  }
+  // Validate email
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('⚠️ Please enter a valid email address'); return;
+  }
+  // Validate phone — 7 to 15 digits, optional leading +
+  if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
+    showToast('⚠️ Please enter a valid phone number'); return;
+  }
+  // Validate address
+  if (!address || address.length < 5) {
+    showToast('⚠️ Please enter your delivery address'); return;
+  }
+
+  // All fields valid — proceed to Paystack
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
   const shipping = 3.99;
   const total = subtotal + shipping;
-  
-  const ref = 'VC-PAYSTK-' + Math.random().toString(36).substr(2,8).toUpperCase();
-  
+  const ref = 'VC-PAYSTK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
   const checkoutBtn = document.querySelector('.checkout-btn');
   const originalText = checkoutBtn.innerHTML;
   checkoutBtn.disabled = true;
   checkoutBtn.innerHTML = 'Connecting to Paystack...';
-  
-  if (typeof PaystackPop === 'undefined') {
-    showToast('⚠️ Paystack SDK failed to load. Simulating checkout...');
+
+  // Ensure .env config has finished loading before reading the key
+  if (!configLoaded) await configPromise;
+
+  const paystackKey = config.PAYSTACK_PUBLIC_KEY;
+
+  if (!paystackKey) {
+    showToast('⚠️ Paystack key missing from .env. Simulating checkout...');
     setTimeout(() => {
-      document.getElementById('txn-ref').textContent = ref;
-      document.getElementById('success-msg').textContent = `Thank you, ${name}! Your simulated payment of GH₵${total.toFixed(2)} was completed. Your order is confirmed.`;
-      closeCheckout();
-      document.getElementById('success-overlay').classList.add('open');
+      showSuccessModal(name, ref, total);
       checkoutBtn.disabled = false;
       checkoutBtn.innerHTML = originalText;
     }, 1500);
     return;
   }
-  
+
+  if (typeof PaystackPop === 'undefined') {
+    showToast('⚠️ Paystack SDK failed to load. Simulating checkout...');
+    setTimeout(() => {
+      showSuccessModal(name, ref, total);
+      checkoutBtn.disabled = false;
+      checkoutBtn.innerHTML = originalText;
+    }, 1500);
+    return;
+  }
+
   const handler = PaystackPop.setup({
-    key: config.PAYSTACK_PUBLIC_KEY || 'pk_live_e617f2f529b921892cd36fa242e99a026278ca62',
+    key: paystackKey,
     email: email,
-    amount: Math.round(total * 100), // GHS pesewas sub-units
+    amount: Math.round(total * 100), // pesewas
     currency: 'GHS',
     ref: ref,
     metadata: {
       custom_fields: [
-        { display_name: "Customer Name", variable_name: "customer_name", value: name },
-        { display_name: "Phone Number", variable_name: "phone_number", value: phone },
-        { display_name: "Delivery Address", variable_name: "delivery_address", value: address }
+        { display_name: 'Customer Name',    variable_name: 'customer_name',    value: name },
+        { display_name: 'Phone Number',     variable_name: 'phone_number',     value: phone },
+        { display_name: 'Delivery Address', variable_name: 'delivery_address', value: address },
       ]
     },
-    callback: function(response){
-      document.getElementById('txn-ref').textContent = response.reference;
-      document.getElementById('success-msg').textContent = `Thank you, ${name}! Your payment of GH₵${total.toFixed(2)} was successfully processed via Paystack (Ref: ${response.reference}). Your order is confirmed.`;
-      closeCheckout();
-      document.getElementById('success-overlay').classList.add('open');
+    callback: function(response) {
+      showSuccessModal(name, response.reference, total);
       checkoutBtn.disabled = false;
       checkoutBtn.innerHTML = originalText;
     },
-    onClose: function(){
-      showToast('❌ Payment cancelled by user');
+    onClose: function() {
+      showToast('❌ Payment cancelled');
       checkoutBtn.disabled = false;
       checkoutBtn.innerHTML = originalText;
     }
   });
-  
+
   handler.openIframe();
 }
-function closeSuccess(){
+
+// ─── #3 & #12 combined: success modal sets dynamic name + order summary ───
+function showSuccessModal(name, ref, total) {
+  document.getElementById('txn-ref').textContent = ref;
+  document.getElementById('success-msg').textContent =
+    `Thank you, ${name}! Your payment of GH₵${total.toFixed(2)} was successfully processed. Your order is confirmed and will arrive within 3–5 business days.`;
+
+  // Populate order summary inside success modal
+  const summaryEl = document.getElementById('success-order-summary');
+  if (summaryEl) {
+    summaryEl.innerHTML = cart.map(x => `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+        <img src="${x.image}" alt="${x.name}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;">
+        <span style="flex:1;font-size:13px;font-weight:500;">${x.name} ×${x.qty}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--blue2);">GH₵${(x.price * x.qty).toFixed(2)}</span>
+      </div>
+    `).join('');
+  }
+
+  closeCheckout();
+  document.getElementById('success-overlay').classList.add('open');
+}
+
+function closeSuccess() {
   document.getElementById('success-overlay').classList.remove('open');
   document.body.style.overflow = '';
+  // Clear cart after successful purchase
   cart = [];
   updateCartBadge();
   renderCartItems();
   saveCart();
+  // Refresh grids so all Remove buttons reset to Add
+  renderFeatured();
+  renderShop();
 }
 
-// Mobile menu setup
 document.querySelectorAll('#mobile-menu a').forEach(link => {
   link.addEventListener('click', closeMobileMenu);
 });
 
-function setCategory(btn, cat){
+function setCategory(btn, cat) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   currentCategory = cat;
   renderShop();
 }
-function filterProducts(){
+function filterProducts() {
   currentSearch = document.getElementById('search-input').value;
   renderShop();
 }
-function sortProducts(val){
+function sortProducts(val) {
   currentSort = val;
   renderShop();
 }
 
-function toggleWishlist(btn){
+function toggleWishlist(btn) {
   btn.textContent = btn.textContent === '♡' ? '❤️' : '♡';
 }
 
-// Theme initialization and persistence
+// Theme
 let isDark = true;
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'light') {
   isDark = false;
   document.body.classList.add('light');
   const themeIcon = document.getElementById('theme-icon');
-  if (themeIcon) {
-    themeIcon.setAttribute('data-lucide', 'sun');
-  }
+  if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
 } else {
   isDark = true;
   document.body.classList.remove('light');
   const themeIcon = document.getElementById('theme-icon');
-  if (themeIcon) {
-    themeIcon.setAttribute('data-lucide', 'moon');
-  }
+  if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
 }
 
 document.getElementById('theme-btn').addEventListener('click', () => {
@@ -388,9 +476,7 @@ document.getElementById('theme-btn').addEventListener('click', () => {
   const themeIcon = document.getElementById('theme-icon');
   if (themeIcon) {
     themeIcon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
-    if (window.lucide) {
-      lucide.createIcons();
-    }
+    if (window.lucide) lucide.createIcons();
   }
 });
 
@@ -399,38 +485,35 @@ document.getElementById('cart-open-btn').addEventListener('click', openCart);
 document.getElementById('hamburger-btn').addEventListener('click', () => {
   document.getElementById('mobile-menu').classList.toggle('open');
 });
-function closeMobileMenu(){
+function closeMobileMenu() {
   document.getElementById('mobile-menu').classList.remove('open');
 }
 
-function subscribeNewsletter(btn){
+function subscribeNewsletter(btn) {
   const input = btn.previousElementSibling;
-  if(!input.value.includes('@')){ showToast('Please enter a valid email'); return; }
+  if (!input.value.includes('@')) { showToast('Please enter a valid email'); return; }
   showToast('🎉 Subscribed! Welcome to VoltCart!');
   input.value = '';
 }
 
 document.querySelectorAll('.ripple-btn').forEach(btn => {
-  btn.addEventListener('click', function(e){
+  btn.addEventListener('click', function(e) {
     const r = document.createElement('span');
     const rect = this.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
-    
-    // Support coordinate detection safely on all mobile browsers and touch interfaces
     const clientX = typeof e.clientX === 'number' ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : rect.left + size / 2);
     const clientY = typeof e.clientY === 'number' ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : rect.top + size / 2);
-    
     r.className = 'ripple';
-    r.style.cssText = `width:${size}px;height:${size}px;left:${clientX-rect.left-size/2}px;top:${clientY-rect.top-size/2}px`;
+    r.style.cssText = `width:${size}px;height:${size}px;left:${clientX - rect.left - size / 2}px;top:${clientY - rect.top - size / 2}px`;
     this.appendChild(r);
-    setTimeout(()=>r.remove(), 700);
+    setTimeout(() => r.remove(), 700);
   });
 });
 
 let toastTimer;
-function showToast(msg){
+function showToast(msg) {
   let t = document.getElementById('toast');
-  if(!t){
+  if (!t) {
     t = document.createElement('div');
     t.id = 'toast';
     t.style.cssText = `position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:12px 24px;border-radius:100px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.4);font-family:'DM Sans',sans-serif;`;
@@ -440,69 +523,53 @@ function showToast(msg){
   t.style.opacity = '1';
   t.style.transform = 'translateX(-50%) translateY(0)';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)'},3000);
+  toastTimer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 3000);
 }
 
-function triggerReveal(){
+function triggerReveal() {
   const els = document.querySelectorAll('.reveal:not(.visible)');
   const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, {threshold:0.15});
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.15 });
   els.forEach(el => obs.observe(el));
 }
 
-function animateCounters(){
+function animateCounters() {
   const statsContainer = document.getElementById('about-stats-container');
-  if(!statsContainer) return;
-  
+  if (!statsContainer) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if(entry.isIntersecting){
+      if (entry.isIntersecting) {
         const counters = statsContainer.querySelectorAll('.stat-num');
         counters.forEach(counter => {
           const target = parseFloat(counter.getAttribute('data-target'));
           const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
           const suffix = counter.getAttribute('data-suffix') || '';
-          
-          let start = 0;
           const duration = 2000;
           const startTime = performance.now();
-          
           function updateCounter(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
-            // Ease out quad
             const easeProgress = progress * (2 - progress);
-            
-            const currentVal = start + easeProgress * target;
-            counter.textContent = currentVal.toFixed(decimals) + suffix;
-            
-            if(progress < 1) {
-              requestAnimationFrame(updateCounter);
-            } else {
-              counter.textContent = target.toFixed(decimals) + suffix;
-            }
+            counter.textContent = (easeProgress * target).toFixed(decimals) + suffix;
+            if (progress < 1) requestAnimationFrame(updateCounter);
+            else counter.textContent = target.toFixed(decimals) + suffix;
           }
           requestAnimationFrame(updateCounter);
         });
         obs.unobserve(statsContainer);
       }
     });
-  }, {threshold: 0.15});
+  }, { threshold: 0.15 });
   obs.observe(statsContainer);
 }
 
-// Search button click handler
 document.getElementById('search-btn').addEventListener('click', () => {
   const shopSection = document.getElementById('shop');
   const searchInput = document.getElementById('search-input');
   if (shopSection && searchInput) {
     shopSection.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      searchInput.focus();
-      searchInput.select();
-    }, 500);
+    setTimeout(() => { searchInput.focus(); searchInput.select(); }, 500);
   }
 });
 
@@ -514,14 +581,12 @@ animateCounters();
 updateCartBadge();
 renderCartItems();
 
-if (window.lucide) {
-  lucide.createIcons();
-}
+if (window.lucide) lucide.createIcons();
 
-window.addEventListener('scroll', triggerReveal, {passive:true});
+window.addEventListener('scroll', triggerReveal, { passive: true });
 
 document.addEventListener('keydown', e => {
-  if(e.key === 'Escape'){
+  if (e.key === 'Escape') {
     closeCart();
     closeCheckout();
     document.getElementById('success-overlay').classList.remove('open');
